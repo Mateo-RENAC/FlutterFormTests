@@ -41,6 +41,17 @@ class _HomePageState extends State<HomePage> {
     "Yaourt" : false,
     "Pain" : false,
   };
+
+  //Radio
+  ChoixTransport choixTransport = ChoixTransport.Avion;
+  Icon iconTransport = Icon(Icons.airplanemode_active);
+
+  //Switch
+  bool interrupteur = false;
+
+  //Slider
+  double rayonKms = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,10 +86,74 @@ class _HomePageState extends State<HomePage> {
           Container(
             child: Column(
               children: checkListCourse(),
-            )
-          )
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text("Avion"),
+              Radio(
+              value: ChoixTransport.Avion,
+              groupValue : choixTransport,
+              onChanged : (ChoixTransport? c){
+              setState(() {
+                choixTransport = c!;
+                iconTransport = Icon(Icons.airplanemode_active);
+              });
+            },
+          ),
+              Text("Bateau"),
+              Radio(
+                value: ChoixTransport.Bateau,
+                groupValue : choixTransport,
+                onChanged : (ChoixTransport? c){
+                  setState(() {
+                    choixTransport = c!;
+                    iconTransport = Icon(Icons.directions_boat);
+                  });
+                },
+              ),
+              Text("Voiture"),
+              Radio(
+                value: ChoixTransport.Voiture,
+                groupValue : choixTransport,
+                onChanged : (ChoixTransport? c){
+                  setState(() {
+                    choixTransport = c!;
+                    iconTransport = Icon(Icons.directions_car);
+                  });
+                },
+              ),
         ]
       ),
+          iconTransport,
+          Switch(
+            value: interrupteur,
+            inactiveTrackColor: Colors.red,
+            activeColor: Colors.green,
+            onChanged: (bool b){
+              setState(() {
+                interrupteur = b;
+              });
+            }
+          ),
+          Text((interrupteur) ? "Pour" : "Contre"),
+          Slider(
+            min: 0.0,
+            max: 100.0,
+            divisions: 10,
+            label: rayonKms.toString(),
+            inactiveColor: Colors.black87,
+            activeColor: Colors.pinkAccent,
+            value: rayonKms,
+            onChanged: (double d){
+              setState(() {
+                rayonKms = d;
+              });
+            },
+          ),
+          Text("Rayon de recherche : ${rayonKms} km"),
+      ]),
     );
   }
 
@@ -104,12 +179,15 @@ class _HomePageState extends State<HomePage> {
       );
       l.add(row);
     });
-
-
     return l;
   }
 }
 
+enum ChoixTransport{
+  Voiture,
+  Avion,
+  Bateau,
+}
 
 
 
