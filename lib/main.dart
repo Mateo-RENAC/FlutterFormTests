@@ -52,6 +52,9 @@ class _HomePageState extends State<HomePage> {
   //Slider
   double rayonKms = 0.0;
 
+  //DatePicker
+  DateTime? dateEvenement;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,6 +156,11 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           Text("Rayon de recherche : ${rayonKms} km"),
+          ElevatedButton(
+            onPressed: _selectionDate,
+            child : Text("Sélectionner une date"),
+          ),
+          Text((dateEvenement == null)? "Aucune Date" : "Date : ${dateEvenement?.day}/${dateEvenement?.month}/${dateEvenement?.year}"),
       ]),
     );
   }
@@ -181,6 +189,23 @@ class _HomePageState extends State<HomePage> {
     });
     return l;
   }
+
+
+  Future<void> _selectionDate() async{
+    DateTime? _dateChoisie = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1980),
+      lastDate: DateTime(2030),
+    );
+    if(_dateChoisie != null){
+      setState(() {
+        dateEvenement = _dateChoisie;
+      });
+    }
+  }
+
+
 }
 
 enum ChoixTransport{
